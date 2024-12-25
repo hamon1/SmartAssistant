@@ -1,36 +1,80 @@
 package com.example.smart_assistant.model;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true) // 응답 데이터에 정의되지 않은 필드는 무시
 public class News {
-    private String url;
-    private String urlMobile;
-    private String title;
-    private String seendate;
-    private String socialimage;
-    private String domain;
-    private String language;
-    private String sourcecountry;
 
-    @JsonProperty("url")
-    public String getUrl() {
-        return url;
-    }
+    @JsonProperty("source")
+    private Source source;
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    @JsonProperty("url_mobile")
-    public String getUrlMobile() {
-        return urlMobile;
-    }
-
-    public void setUrlMobile(String urlMobile) {
-        this.urlMobile = urlMobile;
-    }
+    @JsonProperty("author")
+    private String author;
 
     @JsonProperty("title")
+    private String title;
+
+    @JsonProperty("description")
+    private String description;
+
+    @JsonProperty("url")
+    private String url;
+
+    @JsonProperty("urlToImage")
+    private String urlToImage;
+
+    @JsonProperty("publishedAt")
+    private String publishedAt;
+
+    @JsonProperty("content")
+    private String content;
+
+    // 내부 Source 클래스 정의
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Source {
+        @JsonProperty("id")
+        private String id;
+
+        @JsonProperty("name")
+        private String name;
+
+        // Getters and Setters
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    // Getters and Setters
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -39,48 +83,43 @@ public class News {
         this.title = title;
     }
 
-    @JsonProperty("seendate")
-    public String getSeendate() {
-        return seendate;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSeendate(String seendate) {
-        this.seendate = seendate;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    @JsonProperty("socialimage")
-    public String getSocialimage() {
-        return socialimage;
+    public String getUrl() {
+        return url;
     }
 
-    public void setSocialimage(String socialimage) {
-        this.socialimage = socialimage;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    @JsonProperty("domain")
-    public String getDomain() {
-        return domain;
+    public String getUrlToImage() {
+        return urlToImage;
     }
 
-    public void setDomain(String domain) {
-        this.domain = domain;
+    public void setUrlToImage(String urlToImage) {
+        this.urlToImage = urlToImage;
     }
 
-    @JsonProperty("language")
-    public String getLanguage() {
-        return language;
+    public String getPublishedAt() {
+        return publishedAt;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setPublishedAt(String publishedAt) {
+        this.publishedAt = publishedAt;
     }
 
-    @JsonProperty("sourcecountry")
-    public String getSourcecountry() {
-        return sourcecountry;
+    public String getContent() {
+        return content;
     }
 
-    public void setSourcecountry(String sourcecountry) {
-        this.sourcecountry = sourcecountry;
+    public void setContent(String content) {
+        this.content = content;
     }
 }
