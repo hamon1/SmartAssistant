@@ -14,6 +14,9 @@ import com.example.smart_assistant.model.ResponseWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.nio.charset.StandardCharsets;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -40,10 +43,33 @@ public class ExternalApiService {
 
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
     
+            // ZonedDateTime now = ZonedDateTime.now();
+            // ZonedDateTime yesterday = now.minusHours(24);
     
+            // String from = yesterday.format(DateTimeFormatter.ISO_INSTANT);
+            // String to = now.format(DateTimeFormatter.ISO_INSTANT);
+
+            // System.out.println("From: " + from);
+            // System.out.println("To: " + to);
+
+            ZonedDateTime now = ZonedDateTime.now(); // 현재 시간
+            ZonedDateTime yesterday = now.minusDays(14); // 24시간 전
+
+            // ISO 8601 형식으로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            String from = yesterday.format(formatter);
+            String to = now.format(formatter);
+
+            System.out.println("From: " + from);
+            System.out.println("To: " + to);
+
             String url = "https://newsapi.org/v2/everything?" +
-                "q=" + encodedQuery + "&" + "language=ko&" +
-                "apiKey=" + ApiKey;
+                "q=" + encodedQuery 
+                + "&from=" + from 
+                + "&to=" + to 
+                + "&language=ko" 
+                + "&sortBy=publishedAt" 
+                + "&apiKey=" + ApiKey;
     
              // 요청 헤더 설정 (Optional)
             HttpHeaders headers = new HttpHeaders();
