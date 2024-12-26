@@ -2,10 +2,10 @@ package com.example.smart_assistant;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
-// @SpringBootApplication(scanBasePackages = "com.example.smart_assistant")
-
+@EnableCaching
 public class SmartAssistantApplication {
 
 	public static void main(String[] args) {
