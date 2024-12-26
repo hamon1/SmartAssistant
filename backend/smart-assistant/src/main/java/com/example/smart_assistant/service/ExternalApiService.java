@@ -37,20 +37,9 @@ public class ExternalApiService {
     }
 
     public String fetchNewsFromNews(String query) {
-        // String url = "https://api.gdeltproject.org/api/v2/doc/doc?query=" + query + "&format=json&maxrecords=10";
-        // String url = "https://api.gdeltproject.org/api/v2/doc/doc?query=country:Korea&startdate=20241224000000&enddate=20241225000000&mode=ArtList&format=json";
         try {
 
             String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
-    
-            // ZonedDateTime now = ZonedDateTime.now();
-            // ZonedDateTime yesterday = now.minusHours(24);
-    
-            // String from = yesterday.format(DateTimeFormatter.ISO_INSTANT);
-            // String to = now.format(DateTimeFormatter.ISO_INSTANT);
-
-            // System.out.println("From: " + from);
-            // System.out.println("To: " + to);
 
             ZonedDateTime now = ZonedDateTime.now(); // 현재 시간
             ZonedDateTime yesterday = now.minusDays(14); // 24시간 전
@@ -67,7 +56,7 @@ public class ExternalApiService {
                 "q=" + encodedQuery 
                 + "&from=" + from 
                 + "&to=" + to 
-                + "&language=ko" 
+                // + "&language=ko" 
                 + "&sortBy=publishedAt" 
                 + "&apiKey=" + ApiKey;
     
@@ -80,64 +69,71 @@ public class ExternalApiService {
             HttpEntity<String> requestEntity = new HttpEntity<>(headers);
     
 
-                // GDELT API 요청
-                ResponseEntity<String> response = restTemplate.exchange(
-                    url, HttpMethod.GET, requestEntity, String.class
-                );
-                // ResponseEntity<ResponseWrapper> response = restTemplate.exchange(
-                //     url, HttpMethod.GET, requestEntity, ResponseWrapper.class
-                // );
-    
-                System.out.println("Response status: " + response.getStatusCode());
-                System.out.println("Response body: " + response.getBody());
-    
-                if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                    // String rawJson = response.getBody().toString();
-                    // String decodedJson = new String(rawJson.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                    // System.out.println("Decoded JSON: " + decodedJson);
+            // GDELT API 요청
+            ResponseEntity<String> response = restTemplate.exchange(
+                url, HttpMethod.GET, requestEntity, String.class
+            );
 
-                    // // ResponseWrapper 클래스를 사용해 디코딩된 JSON을 파싱
-                    // ResponseWrapper wrapper = new ObjectMapper().readValue(decodedJson, ResponseWrapper.class);
-                    // return wrapper.getArticles();
+            System.out.println("Response status: " + response.getStatusCode());
+            System.out.println("Response body: " + response.getBody());
 
-                    // System.out.println("\n\nResponse\n\n");
-                    // String jsonString = response.getBody(); // JSON 문자열 확인
-                    // System.out.println("JSON String: " + jsonString);
-
-                    // byte[] decodedBytes = jsonString.getBytes(StandardCharsets.ISO_8859_1);
-                    // String decodedJson = new String(decodedBytes, StandardCharsets.UTF_8); // UTF-8로 문자열 변환
-                    
-                    
-                    // ObjectMapper objectMapper = new ObjectMapper();
-                    // ResponseWrapper wrapper = objectMapper.readValue(decodedJson, ResponseWrapper.class); // JSON 파싱
-                    // return wrapper.getArticles();
-                    return response.getBody();
-                } else {
-                    System.out.println("Failed to fetch news. Status code: " + response.getStatusCode());
-                }
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                return response.getBody();
+            } else {
+                System.out.println("Failed to fetch news. Status code: " + response.getStatusCode());
+            }
     
         } catch (UnsupportedEncodingException e) {
             System.out.println("Failed to fetch news. Status code: ");
             e.printStackTrace();
-            // return List.of();
-        // } catch (JsonProcessingException e) {
-        //     System.out.println("Failed to fetch news. Status code: ");
-        //     e.printStackTrace();
-        //     // return List.of();
-        // }
         }
-        // return List.of();
         return null;
     }
 
-    // public Trend fetchTrendsFromTwitter(String hashtag) {
-    //     String url = "https://api.twitter.com/2/tweets/search/recent?query=" + hashtag;
-    //     HttpHeaders headers = new HttpHeaders();
-    //     headers.set("Authorization", "Bearer ");
-    //     HttpEntity<String> entity = new HttpEntitu<>(headers);
-    //     ResponseEntity<Trend> response = restTemplate.exchange(
-    //         url, HttpMethod.GET, entity, Trend.class);
+    public String fetchTrendsFromTwitter(String query) {
+        try {
+        String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
 
-    //     return response.getBody();
-    // }
+            // ZonedDateTime now = ZonedDateTime.now(); // 현재 시간
+            // ZonedDateTime yesterday = now.minusDays(14); // 24시간 전
+
+            // ISO 8601 형식으로 변환
+            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            // String from = yesterday.format(formatter);
+            // String to = now.format(formatter);
+            String url = "https://newsapi.org/v2/top-headlines?" +
+                "q=" + encodedQuery 
+                // + "&from=" + from 
+                // + "&to=" + to 
+                // + "&language=ko" 
+                // + "&sortBy=publishedAt" 
+                + "&apiKey=" + ApiKey;
+            // 요청 헤더 설정 (Optional)
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", "application/json"); // JSON 형식의 응답 요청
+            // headers.set("Accept-Charset", "UTF-8"); // UTF-8
+    
+            // 요청 엔티티 생성
+            HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+    
+            // GDELT API 요청
+            ResponseEntity<String> response = restTemplate.exchange(
+                url, HttpMethod.GET, requestEntity, String.class
+            );
+
+            System.out.println("Response status: " + response.getStatusCode());
+            System.out.println("Response body: " + response.getBody());
+
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                return response.getBody();
+            } else {
+                System.out.println("Failed to fetch news. Status code: " + response.getStatusCode());
+            }
+        } catch (UnsupportedEncodingException e) {
+            System.out.println("Failed to fetch news. Status code: ");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

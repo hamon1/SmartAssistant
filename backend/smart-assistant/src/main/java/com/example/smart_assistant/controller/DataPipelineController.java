@@ -25,7 +25,13 @@ public class DataPipelineController {
     @GetMapping("/top-issues")
     public String getTopIssues() {
         // 예시 쿼리로 GDELT API 호출
-        String query = "South Korea OR trump"; // 필요에 따라 동적으로 설정 가능
+        String query = "South Korea"; // 필요에 따라 동적으로 설정 가능
         return externalApiService.fetchNewsFromNews(query);
+    }
+
+    @GetMapping("/top-headlines")
+    public String getTopHeadlines() {
+        String query = "South Korea";
+        return externalApiService.fetchTrendsFromTwitter(query);
     }
 }
