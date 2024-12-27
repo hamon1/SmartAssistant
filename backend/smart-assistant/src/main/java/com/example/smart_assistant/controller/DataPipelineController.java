@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 // import com.example.smart_assistant.service.DataProcessingService;
-import com.example.smart_assistant.model.News;
+// import com.example.smart_assistant.model.News;
 import com.example.smart_assistant.service.ExternalApiService;
 
 import com.example.smart_assistant.model.ResponseWrapper;

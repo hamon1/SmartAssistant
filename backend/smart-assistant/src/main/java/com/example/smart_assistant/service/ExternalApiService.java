@@ -12,11 +12,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.cache.annotation.Cacheable;
 
-import com.example.smart_assistant.model.News;
+// import com.example.smart_assistant.model.News;
 import com.example.smart_assistant.model.ResponseWrapper;
+import com.example.smart_assistant.model.WeatherResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -30,6 +33,7 @@ import java.util.List;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+
 // import com.example.smart_assistant.model.Trend;
 
 @Service
@@ -41,12 +45,14 @@ public class ExternalApiService {
     @Value("${weatherapi.key}")
     private String WeatherApiKey;
 
+    private final ObjectMapper objectMapper;
 
     private final RestTemplate restTemplate;
 
     @Autowired
-    public ExternalApiService(RestTemplate restTemplate) {
+    public ExternalApiService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
     }
 
     public String fetchWeather(String location) {
@@ -190,6 +196,34 @@ public class ExternalApiService {
         }
 
         return null;
+    }
+
+    public List<WeatherResponse> mappingResponses(String response) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response);
+                List<WeatherResponse> weatherResponses = objectMapper.convertValue(rootNode, new TypeReference<List<WeatherResponse>>() {});
+                return weatherResponses;
+        } catch (Exception e) {
+            System.out.println("Failed to parse weather response.");
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public WeatherResponse mappingResponse(String response) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response);
+
+                WeatherResponse weatherResponse = objectMapper.treeToValue(rootNode, WeatherResponse.class);
+                System.out.println("weather");
+                return weatherResponse;
+        } catch (Exception e) {
+            System.out.println("Failed to parse weather response.");
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
     public ResponseWrapper parseJsonResponse(String jsonResponse) {
