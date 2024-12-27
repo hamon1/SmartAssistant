@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.smart_assistant.service.ExternalApiService;
 import com.example.smart_assistant.model.WeatherResponse;
+import com.example.smart_assistant.algorithm.RecommendationAlogrithm;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,25 +34,29 @@ public class WeatherController {
     }
 
     @GetMapping(value = "/weather", produces = "application/json")
-    public WeatherResponse getWeather(@RequestParam String location) {
+    public String getWeather(@RequestParam String location) {
         // WeatherResponse response = externalApiService.mappingResponse(externalApiService.fetchWeather(location));
         String response = externalApiService.fetchWeather(location);
-        // try {
-        //     // JSON 파싱
-        //     JsonNode rootNode = objectMapper.readTree(response);
-        //     String cityName = rootNode.path("location").path("name").asText();
-        //     double temperature = rootNode.path("current").path("temp_c").asDouble();
-        //     String condition = rootNode.path("current").path("condition").path("text").asText();
+        WeatherResponse mappingResponse = externalApiService.mappingResponse(response);
+        System.out.println(mappingResponse.getCurrent().getTemp_c());
+        // double tempC, double feelsLikeC, double windChillC, 
+        //                     double heatIndexC, double dewPointC, double windKph, 
+        //                     String condition
+        double tempC = mappingResponse.getCurrent().getTemp_c();
+        double feelsLikeC = mappingResponse.getCurrent().getFeelslike_c();
+        double windChillC = mappingResponse.getCurrent().getWindchill_c();
+        double heatIndexC = mappingResponse.getCurrent().getHeatindex_c();
+        double dewPointC = mappingResponse.getCurrent().getDewpoint_c();
+        double windKph = mappingResponse.getCurrent().getWind_kph();
+        String condition = mappingResponse.getCurrent().getCondition().getText();
 
-        //     // 특정 값만 JSON 형식으로 반환
-        //     return String.format("{\"city\":\"%s\",\"temperature\":%f,\"condition\":\"%s\"}",
-        //             cityName, temperature, condition);
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        //     return "{\"error\":\"Failed to parse weather data\"}";
-        // }
+        RecommendationAlogrithm recommendationAlogrithm = new RecommendationAlogrithm();
+        String recommendation = recommendationAlogrithm.recommendOutfit(tempC, feelsLikeC, windChillC, heatIndexC, dewPointC, windKph, condition);
 
-        return externalApiService.mappingResponse(response);
+        System.out.println(tempC + "/" + feelsLikeC + "/" + windChillC + "/" + heatIndexC + "/" + dewPointC + "/" + windKph + "/" + condition);
+        System.out.println("result: " + recommendation);
+        // return mappingResponse;
+        return recommendation;
     }
 
     @GetMapping(value = "/testWeather", produces = "application/json") 
