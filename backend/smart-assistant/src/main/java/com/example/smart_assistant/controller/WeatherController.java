@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.smart_assistant.service.ExternalApiService;
 import com.example.smart_assistant.model.WeatherResponse;
-import com.example.smart_assistant.algorithm.RecommendationAlogrithm;
+import com.example.smart_assistant.algorithm.RecommendationAlgorithm;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,8 +50,20 @@ public class WeatherController {
         double windKph = mappingResponse.getCurrent().getWind_kph();
         String condition = mappingResponse.getCurrent().getCondition().getText();
 
-        RecommendationAlogrithm recommendationAlogrithm = new RecommendationAlogrithm();
-        String recommendation = recommendationAlogrithm.recommendOutfit(tempC, feelsLikeC, windChillC, heatIndexC, dewPointC, windKph, condition);
+        String forecaseResponse = externalApiService.getForecast(location);
+        WeatherResponse forecastMappingResponse = externalApiService.mappingResponse(forecaseResponse);
+
+        
+        System.out.println("forecast weather avg: " + forecastMappingResponse.getForecast().getForecastday().get(0).getDay().getAvgtemp_c());
+        System.out.println("forecast weather max: " + forecastMappingResponse.getForecast().getForecastday().get(0).getDay().getMaxtemp_c());
+        System.out.println("forecast weather min: " + forecastMappingResponse.getForecast().getForecastday().get(0).getDay().getMintemp_c());
+
+        double avgtemp = forecastMappingResponse.getForecast().getForecastday().get(0).getDay().getAvgtemp_c();
+        double maxtemp = forecastMappingResponse.getForecast().getForecastday().get(0).getDay().getMaxtemp_c();
+        double mintemp = forecastMappingResponse.getForecast().getForecastday().get(0).getDay().getMintemp_c();
+
+        RecommendationAlgorithm recommendationAlgorithm = new RecommendationAlgorithm();
+        String recommendation = recommendationAlgorithm.recommendOutfit(tempC, feelsLikeC, windChillC, heatIndexC, dewPointC, windKph, condition, avgtemp, maxtemp, mintemp, 0, "");
 
         System.out.println(tempC + "/" + feelsLikeC + "/" + windChillC + "/" + heatIndexC + "/" + dewPointC + "/" + windKph + "/" + condition);
         System.out.println("result: " + recommendation);

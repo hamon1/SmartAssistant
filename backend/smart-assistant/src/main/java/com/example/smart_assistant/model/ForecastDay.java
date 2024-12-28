@@ -1,6 +1,8 @@
 package com.example.smart_assistant.model;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ForecastDay {
     private String date;
     private Day day;

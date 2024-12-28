@@ -54,14 +54,15 @@ public class ExternalApiService {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
-
+    
     public String fetchWeather(String location) {
-            String url = String.format("https://api.weatherapi.com/v1/current.json?key=%s&q=%s", WeatherApiKey, location);
-            String response = restTemplate.getForObject(url, String.class);
-            return response;
+        String url = String.format("https://api.weatherapi.com/v1/current.json?key=%s&q=%s", WeatherApiKey, location);
+        String response = restTemplate.getForObject(url, String.class);
+        // System.out.println(response);
+        return response;
     }
 
-    // @Scheduled(cron = "0 0 0 * * *") // 매일 자정 실행
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정 실행
     @Cacheable(value="weather", key = "#location")
     public String fetchWeeklyWeather(String location) {
         List<Map<String, Object>> weekWeatherData = new ArrayList<>();
@@ -99,6 +100,15 @@ public class ExternalApiService {
             e.printStackTrace();
             return "Failed to process weather data";
         }
+    }
+    
+    public String getForecast(String location) {
+        String url = String.format("https://api.weatherapi.com/v1/forecast.json?key=%s&q=%s&days=1", WeatherApiKey, location);
+        String response = restTemplate.getForObject(url, String.class);
+
+
+
+        return response;
     }
 
     public String fetchNewsFromNews(String query) {
@@ -210,6 +220,7 @@ public class ExternalApiService {
         }
         return null;
     }
+
     public WeatherResponse mappingResponse(String response) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();

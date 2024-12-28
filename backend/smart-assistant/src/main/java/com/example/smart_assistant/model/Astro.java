@@ -1,5 +1,7 @@
 package com.example.smart_assistant.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Astro {
     private String sunrise;
     private String sunset;
@@ -45,5 +47,5 @@ public class Astro {
     public void setMoon_illumination(String moon_illumination) {
         this.moon_illumination = moon_illumination;
     }
-    
+
 }
