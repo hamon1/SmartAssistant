@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 public class WeatherController {
-    @Value("${weatherapi.key}")
+    @Value("${WEATHERAPI_KEY}")
     private String apiKey;
 
     private final ExternalApiService externalApiService;

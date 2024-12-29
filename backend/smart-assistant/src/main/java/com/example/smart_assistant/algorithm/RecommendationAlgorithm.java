@@ -20,7 +20,7 @@ public class RecommendationAlgorithm {
         double adjustedFeelsLikeC = feelsLikeC + userTempOffset + seasonalOffset;
 
         // 기본 기온 조건
-        if (adjustedTempC < 0) {
+        if (adjustedTempC < 5) {
             recommendations.put("Thick Coat", 5); // 두꺼운 코트
             recommendations.put("Scarf", 4); // 목도리
             recommendations.put("Gloves", 4); // 장갑

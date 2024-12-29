@@ -21,6 +21,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
+
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,11 +41,13 @@ import java.util.Map;
 
 @Service
 public class ExternalApiService {
+    // private final String newsapiKey;    
+    // private final String weatherapiKey;    
     
-    @Value("${newsapi.key}")
+    @Value("${NEWSAPI_KEY}")
     private String NewsApiKey;
 
-    @Value("${weatherapi.key}")
+    @Value("${WEATHERAPI_KEY}")
     private String WeatherApiKey;
 
     private final ObjectMapper objectMapper;
@@ -53,6 +58,10 @@ public class ExternalApiService {
     public ExternalApiService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+        
+        // Dotenv dotenv = Dotenv.configure().load();
+        // this.newsapiKey = dotenv.get("NEWSAPI_KEY");
+        // this.weatherapiKey = dotenv.get("WEATHERAPI_KEY");
     }
     
     public String fetchWeather(String location) {

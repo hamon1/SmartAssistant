@@ -1,4 +1,6 @@
-.env
+.env*
+
+.**/src/main/resources/api-keys.properties
 
 HELP.md
 target/
