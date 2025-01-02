@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.smart_assistant.service.EmailSender;
 import com.example.smart_assistant.service.ExternalApiService;
 import com.example.smart_assistant.model.WeatherResponse;
 import com.example.smart_assistant.algorithm.RecommendationAlgorithm;
@@ -25,12 +26,14 @@ public class WeatherController {
 
     private final ExternalApiService externalApiService;
     private final ObjectMapper objectMapper;
+    private final EmailSender emailSender;
 
 
     @Autowired
-    public WeatherController(ExternalApiService externalApiService, ObjectMapper objectMapper) {
+    public WeatherController(ExternalApiService externalApiService, ObjectMapper objectMapper, EmailSender emailSender) {
         this.externalApiService = externalApiService;
         this.objectMapper = objectMapper;
+        this.emailSender = emailSender;
     }
 
     @GetMapping(value = "/weather", produces = "application/json")
@@ -67,6 +70,14 @@ public class WeatherController {
 
         System.out.println(tempC + "/" + feelsLikeC + "/" + windChillC + "/" + heatIndexC + "/" + dewPointC + "/" + windKph + "/" + condition);
         System.out.println("result: " + recommendation);
+
+        // try {
+            boolean r = emailSender.sendEmail("leejh021122@naver.com", "weather", recommendation);
+        // } catch (Exception e) {
+        //     System.out.println("Error sending email: " + e.getMessage());
+        //     e.printStackTrace();
+        // }
+
         // return mappingResponse;
         return recommendation;
     }

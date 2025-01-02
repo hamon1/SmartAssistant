@@ -1,5 +1,6 @@
 package com.example.smart_assistant.service;
 
+// import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
