@@ -72,7 +72,7 @@ public class WeatherController {
         System.out.println("result: " + recommendation);
 
         // try {
-            boolean r = emailSender.sendEmail("leejh021122@naver.com", "weather", recommendation);
+        boolean r = emailSender.sendEmail("leejh021122@naver.com", "weather", recommendation);
         // } catch (Exception e) {
         //     System.out.println("Error sending email: " + e.getMessage());
         //     e.printStackTrace();

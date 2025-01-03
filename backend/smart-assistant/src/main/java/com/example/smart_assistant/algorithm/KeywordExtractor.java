@@ -1,5 +1,7 @@
 package com.example.smart_assistant.algorithm;
 
+import opennlp.tools.tokenize.SimpleTokenizer;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,12 +14,14 @@ public class KeywordExtractor {
     public List<String> extractKeywords(String text, int topN) {
         // 단어 분리 및 전처리
         String[] words = text.toLowerCase().replaceAll("[^a-zA-Z ]", "").split("\\s+");
+        SimpleTokenizer tokenizer = SimpleTokenizer.INSTANCE;
+        String[] tokens = tokenizer.tokenize(text);
 
         // 불용어 제거 및 빈도 계산
         Map<String, Integer> wordFrequency = new HashMap<>();
-        for (String word : words) {
-            if (!STOP_WORDS.contains(word)) {
-                wordFrequency.put(word, wordFrequency.getOrDefault(word, 0) + 1);
+        for (String token : tokens) {
+            if (!STOP_WORDS.contains(token)) {
+                wordFrequency.put(token, wordFrequency.getOrDefault(token, 0) + 1);
             }
         }
 
