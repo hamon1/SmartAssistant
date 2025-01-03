@@ -1,44 +1,31 @@
 package com.example.smart_assistant.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WeatherResponse {
-    @JsonProperty("location")
     private Location location;
-
-    @JsonProperty("current")
+    private Forecast forecast;
     private Current current;
 
-    public static class Location {
-        @JsonProperty("name")
-        private String name;
-
-        @JsonProperty("region")
-        private String region;
-
-        @JsonProperty("country")
-        private String country;
-
-        @JsonProperty("lat")
-        private double lat;
-
-        @JsonProperty("lon")
-        private double lon;
-
+    // Getters and Setters
+    public Location getLocation() {
+        return location;
     }
-
-    public static class Current {
-        @JsonProperty("temp_c")
-        private double temp_c;
-
-        @JsonProperty("wind_kph")
-        private double wind_kph;
-
-        @JsonProperty("humidity")
-        private int humidity;
-
-        @JsonProperty("condition")
-        private String condition;
-
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+    public Forecast getForecast() {
+        return forecast;
+    }
+    public void setForecast(Forecast forecast) {
+        this.forecast = forecast;
+    }
+    public Current getCurrent() {
+        return current;
+    }
+    public void setCurrent(Current current) {
+        this.current = current;
     }
 }
