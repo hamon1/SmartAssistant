@@ -141,7 +141,7 @@ public class ExternalApiService {
                 "q=" + encodedQuery 
                 + "&from=" + from 
                 + "&to=" + to 
-                // + "&language=ko" 
+                + "&language=en" 
                 + "&sortBy=publishedAt" 
                 + "&apiKey=" + NewsApiKey;
     
