@@ -20,3 +20,15 @@ self.addEventListener('fetch', event => {
             .then(response => response || fetch(event.request))
     );
 });
+
+self.addEventListener('push', function(event) {
+    const options = {
+        body: event.data.text(),
+        // icon: '/icon.png',
+        // badge: '/badge.png'
+    };
+
+    event.waitUntil(
+        self.registration.showNotification('푸시 알림', options)
+    );
+});
