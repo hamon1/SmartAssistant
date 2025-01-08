@@ -28,28 +28,52 @@ public class DataPipelineController {
     }
 
     @GetMapping("/top-issues")
-    public ResponseWrapper getTopIssues() {
+    public List<Map<String, Object>> getTopIssues() {
         // 예시 쿼리로 GDELT API 호출
         String query = "South Korea"; // 필요에 따라 동적으로 설정 가능
         ResponseWrapper response = externalApiService.parseJsonResponse(externalApiService.fetchNewsFromNews(query));
+        TextSummarizer textSummarizer = new TextSummarizer();
+        KeywordExtractor keywordExtractor = new KeywordExtractor();
 
         System.out.println(response.getArticles().get(0).getDescription());
 
-        String res = response.getArticles().get(1).getDescription();
+        List<Map<String, Object>> result = new ArrayList<>();
 
-        TextSummarizer textSummarizer = new TextSummarizer();
+        for (int idx = 0; idx < 10; idx++) {
+            String article = response.getArticles().get(idx).getDescription();
 
-        String text = textSummarizer.summarizerText(res, 2);
+            String description = textSummarizer.summarizerText(article, 3);
+
+            List<String> keyword = keywordExtractor.extractKeywords(article, 4);
+
+            Map<String, Object> articleData = new HashMap<>();
+            articleData.put("title", response.getArticles().get(idx).getTitle());
+            articleData.put("url", response.getArticles().get(idx).getUrl());
+            articleData.put("description", description);
+            articleData.put("keywords", keyword);
+
+            result.add(articleData);
+
+            // System.out.println("Title: " + response.getArticles().get(idx).getTitle() + "[" + idx + "]");
+            // System.out.println("Description: " + description);
+            // System.out.println();
+        }
+
+        // String res = response.getArticles().get(1).getDescription();
+
+
+        // String text = textSummarizer.summarizerText(res, 2);
         
-        KeywordExtractor keywordExtractor = new KeywordExtractor();
 
-        List<String> keyword = keywordExtractor.extractKeywords(res, 4);
+        // List<String> keyword = keywordExtractor.extractKeywords(res, 4);
 
 
-        System.out.println(keyword);
-        System.out.println(text);
+        // System.out.println(keyword);
+        // System.out.println(text);
 
-        return response;
+        // return response;
+        // System.out.println(response.getArticles().get(0).getUrl());
+        return result;
     }
 
     @GetMapping("/top-headlines")
